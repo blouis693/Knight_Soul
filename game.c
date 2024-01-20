@@ -13,9 +13,10 @@
 
 static ALLEGRO_DISPLAY* gameDisplay;
 static ALLEGRO_TIMER* gameTimer;
-
+static ALLEGRO_EVENT_QUEUE* event_queue;
 
 // Initialize Game Property
+
 void initGame(void){
     if (!al_init())
         game_abort("failed to initialize allegro");
@@ -45,6 +46,9 @@ void initGame(void){
         game_abort("failed to create display");
     // Set Window Title
     al_set_window_title(gameDisplay, gameTitle);
+    
+    //Set event queue
+    
     // Set Game Timer for display
     gameTimer = al_create_timer(1.0f / FPS);
     if (!gameTimer)
