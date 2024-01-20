@@ -13,6 +13,7 @@
 
 static ALLEGRO_DISPLAY* gameDisplay;
 static ALLEGRO_TIMER* gameTimer;
+static ALLEGRO_TIMER* gameTick;
 static ALLEGRO_EVENT_QUEUE* event_queue;
 
 // Initialize Game Property
@@ -48,11 +49,23 @@ void initGame(void){
     al_set_window_title(gameDisplay, gameTitle);
     
     //Set event queue
-    
+    event_queue = al_create_event_queue();
+    if(!event_queue)
+        game_abort("failed to create event queue");
     // Set Game Timer for display
     gameTimer = al_create_timer(1.0f / FPS);
     if (!gameTimer)
         game_abort("failed to create timer");
+  
+    al_register_event_source(event_queue,
+        al_get_display_event_source(gameDisplay));
+    al_register_event_source(event_queue,
+        al_get_timer_event_source(gameTimer));
+    al_register_event_source(event_queue,
+        al_get_keyboard_event_source());
+    al_register_event_source(event_queue, al_get_mouse_event_source());
+
+    al_start_timer(gameTimer);
 }
 
 void startGame(void){
