@@ -14,16 +14,16 @@ const uint32_t FPS = 60;
 const uint32_t SCREEN_W = 800;
 // Screen Height
 const uint32_t SCREEN_H = 800;
-// Reserve Sample Audio
+// Reserve Sample Audio (maximum audio played at a time)
 const uint32_t RESERVE_SAMPLES = 4;
 // Game Title
-const char* gameTitle = "Mini-RPG";
+const char* GAME_TITLE = "Brandon-RPG Adventure";
 // Log File path
 const char* log_file = "log.txt";
 
 
 // Utility Initialization
-void initUtil(void){
+void init_Util(void){
     // Clear the log file and replace it with the new one
     FILE * f = fopen(log_file, "w");
     if(f != NULL)
@@ -31,11 +31,12 @@ void initUtil(void){
     fclose(f);
 }
 
-
 /*
     GAME LOG
+    You can disable the log by remove the "#define LOG_ENABLE" in utility.h
+    It's not recommended if you are still in progress on making this game
+    You may do it after finishing it for performance boost purpose
 */
-
 void print_log(const char * msg, va_list arg, logtype type){
 #ifdef LOG_ENABLE
     // Open File
