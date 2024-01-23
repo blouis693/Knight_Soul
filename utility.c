@@ -7,23 +7,18 @@
 /*
     CONSTANT VARIABLE
     You may change the constant value variable here
+    Description of the variable at header file
 */
-// Frame per Second
-const uint32_t FPS = 60;
-// Screen Width
-const uint32_t SCREEN_W = 800;
-// Screen Height
-const uint32_t SCREEN_H = 800;
-// Reserve Sample Audio
-const uint32_t RESERVE_SAMPLES = 4;
-// Game Title
-const char* gameTitle = "Mini-RPG";
-// Log File path
+const int FPS = 60;
+const int SCREEN_W = 800;
+const int SCREEN_H = 800;
+const int RESERVE_SAMPLES = 4;
+const char* GAME_TITLE = "Brandon-RPG Adventure";
 const char* log_file = "log.txt";
 
 
 // Utility Initialization
-void initUtil(void){
+void init_Util(void){
     // Clear the log file and replace it with the new one
     FILE * f = fopen(log_file, "w");
     if(f != NULL)
@@ -31,11 +26,12 @@ void initUtil(void){
     fclose(f);
 }
 
-
 /*
     GAME LOG
+    You can disable the log by remove the "#define LOG_ENABLE" in utility.h
+    It's not recommended if you are still in progress on making this game
+    You may do it after finishing it for performance boost purpose
 */
-
 void print_log(const char * msg, va_list arg, logtype type){
 #ifdef LOG_ENABLE
     // Open File
@@ -102,5 +98,3 @@ void game_warning(const char * msg, ...){
     va_end(args);
 #endif
 }
-
-
