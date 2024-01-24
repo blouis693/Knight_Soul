@@ -6,19 +6,19 @@
 Player player;
 
 static void init(void){
-    player = createPlayer("pacman.png");
+    player = create_player("pacman.png");
 }
 
 static void draw(void){
-    drawPlayer(&player);
+    draw_player(&player);
 }
 
 static void update(void){
-    updatePlayer(&player);
+    update_player(&player);
 }
 
 static void destroy(void){
-    deletePlayer(&player);
+    delete_player(&player);
 }
 
 Scene create_game_scene(void){

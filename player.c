@@ -1,7 +1,7 @@
 #include "player.h"
 #include "game.h"
 
-Player createPlayer(char * path){
+Player create_player(char * path){
     Player player;
     memset(&player, 0, sizeof(player));
     
@@ -15,7 +15,7 @@ Player createPlayer(char * path){
     return player;
 }
 
-void updatePlayer(Player * player){
+void update_player(Player * player){
     
     if (keyState[ALLEGRO_KEY_W]) {
         player->coord.y -= player->speed;
@@ -31,10 +31,10 @@ void updatePlayer(Player * player){
     }
 }
 
-void drawPlayer(Player * player){
+void draw_player(Player * player){
     al_draw_bitmap(player->image, player->coord.x, player->coord.y, 0);
 }
 
-void deletePlayer(Player * player){
-    
+void delete_player(Player * player){
+    al_destroy_bitmap(player->image);
 }

@@ -13,9 +13,9 @@ typedef struct Player_{
     ALLEGRO_BITMAP* image;
 } Player;
 
-Player createPlayer(char * path);
-void updatePlayer(Player * player);
-void drawPlayer(Player * player);
-void deletePlayer(Player * player);
+Player create_player(char * path);
+void update_player(Player * player);
+void draw_player(Player * player);
+void delete_player(Player * player);
 
 #endif /* player_h */
