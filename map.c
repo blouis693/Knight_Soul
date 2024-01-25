@@ -3,6 +3,11 @@
 
 #include "map.h"
 
+/*
+    TILE SIZE DISPLAYED IN THE GAME
+    You may change the tile size, but
+    it's recommended to make the TILE SIZE is a multiplier from 16 from original image
+ */
 const int TILE_SIZE = 32;
 
 Map create_map(char * path, uint8_t type){
@@ -78,8 +83,8 @@ void draw_map(Map * map, Point cam){
     // Draw map based on the camera point coordinate
     for(int i=0; i<map->row; i++){
         for(int j=0; j<map->col; j++){
-            int dx = i * TILE_SIZE + cam.x; // destiny x
-            int dy = j * TILE_SIZE + cam.y; // destiny y
+            int dy = i * TILE_SIZE - cam.y; // destiny y axis
+            int dx = j * TILE_SIZE - cam.x; // destiny x axis
             ALLEGRO_BITMAP * IMG; // the source bitmap
             
             switch(map->map[i][j]){
@@ -99,17 +104,12 @@ void draw_map(Map * map, Point cam){
                     IMG = map->asset_water;
                     break;
             }
-            /*
-                Since the array indexing is x as row (up-down) and y as column (left-right),
-                transitioning to Allegro we need to switch x and y coordinate since in allegro
-                y is (up-down) and x is (left-right)
-                
-                TLDR : Switch x and y when draw bitmap from array
-            */
+            
+            // Remember to 
             al_draw_scaled_bitmap(
                 IMG, // image
                 0, 0, 16, 16, // source x, source y, width, height
-                dy, dx, TILE_SIZE, TILE_SIZE, // destiny x, destiny y, destiny width, destiny height
+                dx, dy, TILE_SIZE, TILE_SIZE, // destiny x, destiny y, destiny width, destiny height
                 0); // flag : set 0
         }
     }

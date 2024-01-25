@@ -6,15 +6,19 @@
 
 Player player; // Player
 Map map; // Map
-Point Camera; //
 
 static void init(void){
-    Camera = (Point){0, 0};
     player = create_player("pacman.png");
     map = create_map("map0.txt", 0);
 }
 
 static void draw(void){
+    // Set the Camera coordinate
+    Point Camera;
+    Camera.x = player.coord.x;// - (SCREEN_H/2);
+    Camera.y = player.coord.y;// - (SCREEN_W/2);
+    
+    // Draw
     draw_map(&map, Camera);
     draw_player(&player);
 }
