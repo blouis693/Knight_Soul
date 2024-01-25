@@ -30,7 +30,7 @@ typedef struct Map_{
     Feel free to add more if you have some idea or interaction with the map
  */
 Map create_map(char * path, uint8_t type); // Create a map based on given file path
-void draw_map(Map * map); // Draw the map
+void draw_map(Map * map, Point cam); // Draw the map
 void update_map(Map * map); // Update map : you might want add some parameter here
 void destroy_map(Map * map); // Destroy map
 

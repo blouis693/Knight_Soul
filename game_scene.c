@@ -2,14 +2,20 @@
 
 #include "game_scene.h"
 #include "player.h"
+#include "map.h"
 
-Player player;
+Player player; // Player
+Map map; // Map
+Point Camera; //
 
 static void init(void){
+    Camera = (Point){0, 0};
     player = create_player("pacman.png");
+    map = create_map("map0.txt", 0);
 }
 
 static void draw(void){
+    draw_map(&map, Camera);
     draw_player(&player);
 }
 

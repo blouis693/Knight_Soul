@@ -5,7 +5,7 @@ Player create_player(char * path){
     Player player;
     memset(&player, 0, sizeof(player));
     
-    player.coord = (Point){0, 0};
+    player.coord = (Point){SCREEN_H/2, SCREEN_W/2};
     player.speed = 5;
     player.image = al_load_bitmap(path);
     if(!player.image){
@@ -32,7 +32,11 @@ void update_player(Player * player){
 }
 
 void draw_player(Player * player){
-    al_draw_bitmap(player->image, player->coord.x, player->coord.y, 0);
+    al_draw_scaled_bitmap(
+        player->image,
+        0, 0, 16, 16,
+        player->coord.x, player->coord.y, 32, 32,
+        0);
 }
 
 void delete_player(Player * player){
