@@ -8,7 +8,10 @@ Player create_player(char * path,int row,int col){
     Player player;
     memset(&player, 0, sizeof(player));
     
-    player.coord = (Point){(-SCREEN_H/2+col*TILE_SIZE)+TILE_SIZE/4,(-SCREEN_W/2+row*TILE_SIZE)+TILE_SIZE/4};
+    player.coord = (Point){
+                           (-SCREEN_H/2+col*TILE_SIZE)+TILE_SIZE/4,
+                           (-SCREEN_W/2+row*TILE_SIZE)+TILE_SIZE/4
+                          };
     player.pos = (Point){col*TILE_SIZE+TILE_SIZE/2,row*TILE_SIZE+TILE_SIZE/2};
     
     player.speed = 5;
@@ -84,37 +87,7 @@ bool wall_collision(Player* player,Map* map){
     //bottom right corner
     int br_x = (player->pos.x + TILE_SIZE / 4) / TILE_SIZE;
     int br_y = (player->pos.y + TILE_SIZE / 4) / TILE_SIZE;
-//    if (player->direction == UP) {
-//        plus_y -= TILE_SIZE/4;
-//    }
-//
-//    if (player->direction == DOWN) {
-//        plus_y += TILE_SIZE/4;
-//    }
-//
-//    if (player->direction == LEFT) {
-//        plus_x -= TILE_SIZE/4;
-//    }
-//
-//    if (player->direction == RIGHT) {
-//        plus_x += TILE_SIZE/4;
-//    }
-//    int player_x = (player->pos.x+plus_x)/TILE_SIZE;
-//    int player_y = (player->pos.y+plus_y)/TILE_SIZE;
-//
-//    switch (map->map[player_y][player_x]) {
-//        case WALL:
-//            game_log("WALL");
-//            break;
-//        case FLOOR:
-//            game_log("FLOOR");
-//            break;
-//        case WATER:
-//            game_log("WATER");
-//            break;
-//        default:
-//            break;
-//    }
+
 
     if(player->pos.y < TILE_SIZE/4
        || player->pos.x < TILE_SIZE/4
@@ -124,9 +97,7 @@ bool wall_collision(Player* player,Map* map){
        || map->map[tr_y][tr_x]==WALL
        || map->map[bl_y][bl_x]==WALL
        || map->map[br_y][br_x]==WALL)return true;
-//        if(player->pos.y < 0
-//           || player->pos.x < 0
-//           || map->map[player_y][player_x]==WALL)return true;
+
     return false;
     
 }
