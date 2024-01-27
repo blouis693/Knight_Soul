@@ -118,8 +118,10 @@ bool wall_collision(Player* player,Map* map){
 //            break;
 //    }
 
-    if(player->pos.y < 0
-       || player->pos.x < 0
+    if(player->pos.y < TILE_SIZE/4
+       || player->pos.x < TILE_SIZE/4
+       || player->pos.y > TILE_SIZE*map->row-TILE_SIZE/4
+       || player->pos.x > TILE_SIZE*map->row-TILE_SIZE/4
        || map->map[tl_y][tl_x]==WALL
        || map->map[tr_y][tr_x]==WALL
        || map->map[bl_y][bl_x]==WALL
