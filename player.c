@@ -9,7 +9,7 @@ Player create_player(char * path,int row,int col){
     memset(&player, 0, sizeof(player));
     
     player.coord = (Point){(-SCREEN_H/2+col*TILE_SIZE)+TILE_SIZE/4,(-SCREEN_W/2+row*TILE_SIZE)+TILE_SIZE/4};
-    player.pos = (Point){col*TILE_SIZE+TILE_SIZE/4,row*TILE_SIZE+TILE_SIZE/4};
+    player.pos = (Point){col*TILE_SIZE+TILE_SIZE/2,row*TILE_SIZE+TILE_SIZE/2};
     
     player.speed = 5;
     player.image = al_load_bitmap(path);
@@ -25,6 +25,7 @@ void update_player(Player * player,Map* map){
     int save_y = player->coord.y;
     int pos_x = player->pos.x;
     int pos_y = player->pos.y;
+    
     if (keyState[ALLEGRO_KEY_W]) {
         player->coord.y -= player->speed;
         player->pos.y -= player->speed;
@@ -54,8 +55,8 @@ void update_player(Player * player,Map* map){
         player->pos.y = pos_y;
         game_log("collided\n");
     }
-    game_log("direction: %d\n",player->direction);
-    game_log("coord x:%d \n coords y:%d \n",player->pos.x,player->pos.y);
+//    game_log("direction: %d\n",player->direction);
+//    game_log("coord x:%d \n coords y:%d \n",player->pos.x/TILE_SIZE,player->pos.y/TILE_SIZE);
 }
 
 void draw_player(Player * player){
@@ -73,25 +74,36 @@ void delete_player(Player * player){
 bool wall_collision(Player* player,Map* map){
     int plus_x=0;
     int plus_y=0;
-    
-    
-    if (player->direction == UP) {
-        plus_y -= TILE_SIZE/2;
-    }
-
-    if (player->direction == DOWN) {
-        plus_y += TILE_SIZE/2;
-    }
-
-    if (player->direction == LEFT) {
-        plus_x -= TILE_SIZE/2;
-    }
-
-    if (player->direction == RIGHT) {
-        plus_x += TILE_SIZE/2;
-    }
-    int player_x = (player->pos.x+plus_x)/TILE_SIZE;
-    int player_y = (player->pos.y+plus_y)/TILE_SIZE;
+    // top left corner
+    int tl_x = (player->pos.x - TILE_SIZE / 4) / TILE_SIZE;
+    int tl_y = (player->pos.y - TILE_SIZE / 4) / TILE_SIZE;
+    // top right corner
+    int tr_x = (player->pos.x + TILE_SIZE / 4) / TILE_SIZE;
+    int tr_y = (player->pos.y - TILE_SIZE / 4) / TILE_SIZE;
+    //bottom left corner
+    int bl_x = (player->pos.x - TILE_SIZE / 4) / TILE_SIZE;
+    int bl_y = (player->pos.y + TILE_SIZE / 4) / TILE_SIZE;
+    //bottom right corner
+    int br_x = (player->pos.x + TILE_SIZE / 4) / TILE_SIZE;
+    int br_y = (player->pos.y + TILE_SIZE / 4) / TILE_SIZE;
+//    if (player->direction == UP) {
+//        plus_y -= TILE_SIZE/4;
+//    }
+//
+//    if (player->direction == DOWN) {
+//        plus_y += TILE_SIZE/4;
+//    }
+//
+//    if (player->direction == LEFT) {
+//        plus_x -= TILE_SIZE/4;
+//    }
+//
+//    if (player->direction == RIGHT) {
+//        plus_x += TILE_SIZE/4;
+//    }
+//    int player_x = (player->pos.x+plus_x)/TILE_SIZE;
+//    int player_y = (player->pos.y+plus_y)/TILE_SIZE;
+//
 //    switch (map->map[player_y][player_x]) {
 //        case WALL:
 //            game_log("WALL");
@@ -108,9 +120,13 @@ bool wall_collision(Player* player,Map* map){
 
     if(player->pos.y < 0
        || player->pos.x < 0
-       || player->pos.y > ((map->row-1)*TILE_SIZE) + TILE_SIZE/2
-       || player->pos.x > ((map->row-1)*TILE_SIZE) + TILE_SIZE/2
-       ||map->map[player_y][player_x]==WALL)return true;
+       || map->map[tl_y][tl_x]==WALL
+       || map->map[tr_y][tr_x]==WALL
+       || map->map[bl_y][bl_x]==WALL
+       || map->map[br_y][br_x]==WALL)return true;
+//        if(player->pos.y < 0
+//           || player->pos.x < 0
+//           || map->map[player_y][player_x]==WALL)return true;
     return false;
     
 }
