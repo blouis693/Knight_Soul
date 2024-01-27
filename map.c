@@ -26,10 +26,8 @@ Map create_map(char * path, uint8_t type){
     char ch;
     
     map.map = (uint8_t **) malloc(map.row * sizeof(uint8_t *));
-    map.asset = (Asset **)malloc(map.row * sizeof(Asset *));
     for(int i=0; i<map.row; i++){
         map.map[i] = (uint8_t *) malloc(map.col * sizeof(uint8_t));
-        map.asset[i] = (Asset *) malloc(map.col * sizeof(Asset));
     }
     
     // Scan the map to the array
@@ -119,10 +117,7 @@ void draw_map(Map * map, Point cam){
                 0, 0, 16, 16, // source x, source y, width, height
                 dx, dy,TILE_SIZE,TILE_SIZE, // destiny x, destiny y, destiny width, destiny height
                 0); // flag : set 0
-            map->asset[i][j].type = map->map[i][j];
-            map->asset[i][j].x = dx;
-            map->asset[i][j].y = dy;
-            map->asset[i][j].r = TILE_SIZE/2;
+
 
         }
     }
@@ -135,8 +130,6 @@ void update_map(Map * map){
 void destroy_map(Map * map){
     for(int i = 0; i < map->row; i++){
         free(map->map[i]);
-        free(map->asset[i]);
     }
     free(map->map);
-    free(map->asset);
 }

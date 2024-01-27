@@ -11,16 +11,10 @@
 
 
 // Map Struct
-typedef struct Asset_{
-    int x;
-    int y;
-    int r;
-    uint8_t type;
-}Asset;
+
 typedef struct Map_{
     uint8_t ** map;
     int row, col;
-    Asset ** asset;
     ALLEGRO_BITMAP* asset_wall;
     ALLEGRO_BITMAP* asset_floor;
     ALLEGRO_BITMAP* asset_water;
