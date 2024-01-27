@@ -72,8 +72,6 @@ void delete_player(Player * player){
 }
 
 bool wall_collision(Player* player,Map* map){
-    int plus_x=0;
-    int plus_y=0;
     // top left corner
     int tl_x = (player->pos.x - TILE_SIZE / 4) / TILE_SIZE;
     int tl_y = (player->pos.y - TILE_SIZE / 4) / TILE_SIZE;
