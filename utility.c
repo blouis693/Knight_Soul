@@ -17,6 +17,63 @@ const char* log_file = "log.txt";
 const int TILE_SIZE = 64;
 int spawn_x = 0;
 int spawn_y = 0;
+//Queue implementation
+
+
+
+// Function to initialize the queue
+void initializeQueue( Queue* queue,int size) {
+    queue->front = -1;
+    queue->rear = -1;
+    queue->MAX_SIZE = size;
+}
+
+// Function to check if the queue is empty
+int isEmpty( Queue* queue) {
+    return (queue->front == -1 && queue->rear == -1);
+}
+
+// Function to check if the queue is full
+int isFull( Queue* queue) {
+    return (queue->rear == queue->MAX_SIZE - 1);
+}
+
+// Function to add an element to the queue (enqueue)
+void enqueue( Queue* queue, Point value) {
+    if (isFull(queue)) {
+        printf("Queue is full. Cannot enqueue.\n");
+        return;
+    }
+
+    if (isEmpty(queue)) {
+        queue->front = 0;
+    }
+
+    queue->rear++;
+    queue->items[queue->rear] = value;
+
+}
+
+// Function to remove an element from the front of the queue (dequeue)
+void dequeue( Queue* queue) {
+    if (isEmpty(queue)) {
+        printf("Queue is empty. Cannot dequeue.\n");
+        return;
+    }
+
+
+    if (queue->front == queue->rear) {
+        // Last element is dequeued, reset front and rear
+        initializeQueue(queue,queue->MAX_SIZE);
+    } else {
+        // Move front to the next element
+        queue->front++;
+    }
+}
+
+// Function to display the elements of the queue
+
+
 
 // Utility Initialization
 void init_Util(void){

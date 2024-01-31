@@ -48,17 +48,28 @@ typedef void(*function_mouse)(int btn, int x, int y, int dz);
 /*
     ENUMERATION & STRUCT DEFINITION
     You may add new enum or struct definition here
- */
+ 
+ */typedef struct Point_{
+     int x;
+     int y;
+ } Point;
+
+// Structure to represent a queue
+typedef struct Queue_ {
+    Point items[1000];
+    int front;
+    int rear;
+    int MAX_SIZE;
+    
+}Queue;
+
 typedef enum logtype_{
     Log,
     Error,
     Warning
 } logtype;
 
-typedef struct Point_{
-    int x;
-    int y;
-} Point;
+
 
 typedef struct Scene_{
     // You may add your own function or struct variable here
@@ -80,6 +91,12 @@ void init_Util(void);
 void game_log(const char * msg, ...);
 // Game Error Msg
 void game_abort(const char * msg, ...);
-
-
+//queue function
+void initializeQueue( Queue* queue,int size);
+int isEmpty( Queue* queue);
+int isFull( Queue* queue);
+void dequeue( Queue* queue);
+void enqueue( Queue* queue, Point value);
+void display( Queue* queue);
+void init_Util(void);
 #endif /* utility_h */
