@@ -15,9 +15,11 @@ Enemy create_enemy(char * path,int row,int col){
     Enemy enemy;
     memset(&enemy, 0, sizeof(enemy));
     enemy.pos = (Point){col*TILE_SIZE+TILE_SIZE/2,row*TILE_SIZE+TILE_SIZE/2};
+//    enemy.pos = (Point){0,0};
     game_log("coord x:%d \n coords y:%d \n",enemy.pos.x/TILE_SIZE,enemy.pos.y/TILE_SIZE);
     enemy.speed = 5;
     enemy.image = al_load_bitmap(path);
+    enemy.moving = 0;
     if(!enemy.image){
         game_abort("Error Load Bitmap with path : %s", path);
     }
@@ -26,31 +28,48 @@ Enemy create_enemy(char * path,int row,int col){
 }
 
 void update_enemy(Enemy * enemy,Map* map,Point src,Point dest){
-    int move = shortest_path(dest,src,map);
-    switch (move) {
-        case UP:
-            enemy->pos.y -= enemy->speed;
-            break;
-        case DOWN:
-            enemy->pos.y += enemy->speed;
-            break;
-        case LEFT:
-            enemy->pos.x -= enemy->speed;
-            break;
-        case RIGHT:
-            enemy->pos.x += enemy->speed;
-            break;
-        default:
-            break;
+    int speed = 0;
+    int dist = 0;
+    if(!enemy->moving){
+        enemy->direction = shortest_path(dest,src,map);
+        enemy->moving = 1;
+        enemy->dist = TILE_SIZE/enemy->speed;
+        dist = enemy->dist;
     }
-    
+    else{
+        if(enemy->dist == -1){
+            enemy->moving = 0;
+            speed = TILE_SIZE-dist*enemy->speed;
+            enemy->direction = -1;
+        }
+        else speed = enemy->speed;
+        //    int move = -1;
+        switch (enemy->direction) {
+            case UP:
+                enemy->pos.y -= speed;
+                break;
+            case DOWN:
+                enemy->pos.y += speed;
+                break;
+            case LEFT:
+                enemy->pos.x -= speed;
+                break;
+            case RIGHT:
+                enemy->pos.x += speed;
+                break;
+            default:
+                break;
+        }
+        enemy->dist--;
+    }
+
 //    game_log("direction: %d\n",player->direction);
 //    game_log("coord x:%d \n coords y:%d \n",player->pos.x/TILE_SIZE,player->pos.y/TILE_SIZE);
 }
 
 void draw_enemy(Enemy * enemy,Point cam){
-    int dy = enemy->coord.y * TILE_SIZE - cam.y + TILE_SIZE/4; // destiny y axis
-    int dx = enemy->coord.x * TILE_SIZE - cam.x + TILE_SIZE/4; // destiny x axis
+    int dy = enemy->pos.y - cam.y - TILE_SIZE/4; // destiny y axis
+    int dx = enemy->pos.x - cam.x - TILE_SIZE/4; // destiny x axis
     al_draw_scaled_bitmap(
         enemy->image,
         0, 0, 16, 16,

@@ -21,6 +21,8 @@ typedef struct Enemy_{
     int speed;
     ALLEGRO_BITMAP* image;
     int direction;
+    int moving;
+    int dist;
 } Enemy;
 typedef struct enemy_list_{
     struct enemy_list* next;
