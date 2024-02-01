@@ -1,97 +1,115 @@
 //
-//  Enemy.c
+//  SlimeEnemy.c
 //  Knight_Soul
 //
-//  Created by Brandon Louis Chiender on 2024/1/28.
+//  Created by Brandon Louis Chiender on 2024/2/1.
 //
+
+#include "SlimeEnemy.h"
 #include "game.h"
 #include <math.h>
-#include "map.h"
-#include "Enemy.h"
-
 extern int TILE_SIZE;
 int INF = 999999999;
-Enemy create_enemy(char * path,int row,int col){
-    Enemy enemy;
+int looping = 0;
+
+SlimeEnemy create_enemy(char * path,int row,int col){
+    SlimeEnemy enemy;
     memset(&enemy, 0, sizeof(enemy));
     enemy.pos = (Point){col*TILE_SIZE+TILE_SIZE/2,row*TILE_SIZE+TILE_SIZE/2};
 //    enemy.pos = (Point){0,0};
     game_log("coord x:%d \n coords y:%d \n",enemy.pos.x/TILE_SIZE,enemy.pos.y/TILE_SIZE);
-    enemy.speed = 5;
+    enemy.speed = 3;
     enemy.image = al_load_bitmap(path);
-    enemy.moving = 0;
+    enemy.Status = Idle;
     if(!enemy.image){
         game_abort("Error Load Bitmap with path : %s", path);
     }
     
     return enemy;
 }
-
-void update_enemy(Enemy * enemy,Map* map,Point src,Point dest){
-    int speed = 0;
-    int dist = 0;
-    if(!enemy->moving){
-        enemy->direction = shortest_path(dest,src,map);
-        enemy->moving = 1;
-        enemy->dist = TILE_SIZE/enemy->speed;
-        dist = enemy->dist;
+void move_enemy(SlimeEnemy * enemy,int move,int speed){
+    switch (enemy->direction) {
+        case UP:
+            enemy->pos.y -= speed;
+            break;
+        case DOWN:
+            enemy->pos.y += speed;
+            break;
+        case LEFT:
+            enemy->pos.x -= speed;
+            break;
+        case RIGHT:
+            enemy->pos.x += speed;
+            break;
+        default:
+            break;
     }
-    else{
+}
+void update_enemy(SlimeEnemy * enemy,Map* map,Point src,Point dest){
+    int speed = 0;
+    if(enemy->Status == Idle){
+        enemy->dist = TILE_SIZE/enemy->speed;
+        enemy->save_dist = enemy->dist;
+        enemy->direction = shortest_path(dest,src,map);
+        if(enemy->direction == -1){
+            enemy->Status = Jump;
+            enemy->direction = UP;
+            looping = 2;
+        }
+        else{
+            enemy->Status = Moving;
+        }
+    }
+    if(enemy->Status == Moving){
         if(enemy->dist == -1){
-            enemy->moving = 0;
-            speed = TILE_SIZE-dist*enemy->speed;
+            enemy->Status = Idle ;
+            speed = TILE_SIZE-enemy->save_dist*enemy->speed;
             enemy->direction = -1;
         }
         else speed = enemy->speed;
-        //    int move = -1;
-        switch (enemy->direction) {
-            case UP:
-                enemy->pos.y -= speed;
-                break;
-            case DOWN:
-                enemy->pos.y += speed;
-                break;
-            case LEFT:
-                enemy->pos.x -= speed;
-                break;
-            case RIGHT:
-                enemy->pos.x += speed;
-                break;
-            default:
-                break;
+        enemy->dist--;
+        move_enemy(enemy, enemy->direction,speed);
+    }
+    if(enemy->Status == Jump){
+        speed = 2;
+
+        if(enemy->dist == 0){
+            enemy->direction = -1;
+            if(looping == 2){
+                looping--;
+                enemy->direction = DOWN;
+                enemy->dist = enemy->save_dist+1;
+            }
+            else if(looping == 1){
+                enemy->Status = Idle ;
+                enemy->direction = UP;
+            }
+
         }
         enemy->dist--;
-    }
 
-//    game_log("direction: %d\n",player->direction);
-//    game_log("coord x:%d \n coords y:%d \n",player->pos.x/TILE_SIZE,player->pos.y/TILE_SIZE);
+        move_enemy(enemy, enemy->direction,speed);
+    }
 }
 
-void draw_enemy(Enemy * enemy,Point cam){
+void draw_enemy(SlimeEnemy * enemy,Point cam){
     int dy = enemy->pos.y - cam.y - TILE_SIZE/4; // destiny y axis
     int dx = enemy->pos.x - cam.x - TILE_SIZE/4; // destiny x axis
     al_draw_scaled_bitmap(
         enemy->image,
         0, 0, 16, 16,
-        dx, dy, 32, 32,
+        dx, dy, 64, 64,
         0);
 }
 
-void delete_enemy(Enemy * enemy){
+void delete_enemy(SlimeEnemy * enemy){
     al_destroy_bitmap(enemy->image);
-}
-
-enemy_list* insert_enemy(int sx,int sy){
-    enemy_list* new_enemy = (enemy_list*)malloc(sizeof(enemy_list));
-    new_enemy->next = NULL;
-    new_enemy->enemy = create_enemy("pacman.png",sy,sx);
-    return new_enemy;
 }
 
 int shortest_path(Point src,Point dest,Map* map){
     Queue queue;
     if(src.x == dest.x && src.y == dest.y)return -1;
-    int max = 400;
+    int max = map->row*map->col;
     int size = sqrt(max);
     initializeQueue(&queue,max);
 //    queue.items = (Point*)malloc(size*sizeof(Point));
