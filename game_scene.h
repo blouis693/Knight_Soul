@@ -2,7 +2,6 @@
 #define game_scene_h
 
 #include "utility.h"
-#include "Enemy.h"
 
 Scene create_game_scene(void);
 
