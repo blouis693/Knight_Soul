@@ -15,7 +15,8 @@ int looping = 0;
 SlimeEnemy create_enemy(char * path,int row,int col){
     SlimeEnemy enemy;
     memset(&enemy, 0, sizeof(enemy));
-    enemy.pos = (Point){col*TILE_SIZE+TILE_SIZE/2,row*TILE_SIZE+TILE_SIZE/2};
+    enemy.sprite_size = 64;
+    enemy.pos = (Point){col*TILE_SIZE,row*TILE_SIZE};
 //    enemy.pos = (Point){0,0};
     game_log("coord x:%d \n coords y:%d \n",enemy.pos.x/TILE_SIZE,enemy.pos.y/TILE_SIZE);
     enemy.speed = 3;
@@ -98,7 +99,7 @@ void draw_enemy(SlimeEnemy * enemy,Point cam){
     al_draw_scaled_bitmap(
         enemy->image,
         0, 0, 16, 16,
-        dx, dy, 64, 64,
+        dx, dy, enemy->sprite_size, enemy->sprite_size,
         0);
 }
 

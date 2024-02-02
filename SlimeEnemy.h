@@ -28,6 +28,7 @@ typedef struct SlimeEnemy_{
     int Status;
     int dist;
     int save_dist;
+    int sprite_size;
 } SlimeEnemy;
 SlimeEnemy create_enemy(char * path,int row,int col);
 void update_enemy(SlimeEnemy * enemy,Map* map,Point src,Point dest);
