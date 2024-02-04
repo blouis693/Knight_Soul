@@ -85,6 +85,7 @@ typedef struct Scene_{
 /*
     UTILITY FUNCTION DECLARATION
  */
+int generateRandomNumber(int lowerBound, int upperBound);
 // Utility Initialization
 void init_Util(void);
 // Game Log

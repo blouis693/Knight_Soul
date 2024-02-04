@@ -8,21 +8,29 @@
 #include "SlimeEnemy.h"
 #include "game.h"
 #include <math.h>
+#include <time.h>
+
+
 extern int TILE_SIZE;
 int INF = 999999999;
 int looping = 0;
 
-SlimeEnemy create_enemy(char * path,int row,int col){
-    SlimeEnemy enemy;
-    memset(&enemy, 0, sizeof(enemy));
-    enemy.sprite_size = 64;
-    enemy.pos = (Point){col*TILE_SIZE,row*TILE_SIZE};
-//    enemy.pos = (Point){0,0};
-    game_log("coord x:%d \n coords y:%d \n",enemy.pos.x/TILE_SIZE,enemy.pos.y/TILE_SIZE);
-    enemy.speed = 3;
-    enemy.image = al_load_bitmap(path);
-    enemy.Status = Idle;
-    if(!enemy.image){
+Enemylist* insert(SlimeEnemy* enemy){
+    Enemylist* tmp = (Enemylist*)malloc(sizeof(Enemylist));
+    if(!tmp)game_log("failed\n");
+    tmp->next = NULL;
+    tmp->enemy = enemy;
+    return tmp;
+}
+SlimeEnemy* create_enemy(char * path,int row,int col){
+    SlimeEnemy* enemy =(SlimeEnemy*)malloc(sizeof(SlimeEnemy));
+    enemy->sprite_size = 64;
+    enemy->pos = (Point){col*TILE_SIZE+TILE_SIZE/4,row*TILE_SIZE+TILE_SIZE/4};
+    game_log("coord x:%d \n coords y:%d \n",enemy->pos.x/TILE_SIZE,enemy->pos.y/TILE_SIZE);
+    enemy->speed = 3;
+    enemy->image = al_load_bitmap(path);
+    enemy->Status = Idle;
+    if(!enemy->image){
         game_abort("Error Load Bitmap with path : %s", path);
     }
     
@@ -52,14 +60,15 @@ void update_enemy(SlimeEnemy * enemy,Map* map,Point src,Point dest){
         enemy->dist = TILE_SIZE/enemy->speed;
         enemy->save_dist = enemy->dist;
         enemy->direction = shortest_path(dest,src,map);
-        if(enemy->direction == -1){
-            enemy->Status = Jump;
-            enemy->direction = UP;
-            looping = 2;
-        }
-        else{
-            enemy->Status = Moving;
-        }
+//        if(enemy->direction == -1){
+//            enemy->Status = Jump;
+//            enemy->direction = UP;
+//            looping = 2;
+//        }
+//        else{
+//            enemy->Status = Moving;
+//        }
+        enemy->Status = Moving;
     }
     if(enemy->Status == Moving){
         if(enemy->dist == -1){

@@ -2,6 +2,7 @@
 #include "game.h"
 #include <math.h>
 #include "map.h"
+
 extern const int TILE_SIZE;
 
 Player create_player(char * path,int row,int col){
@@ -65,8 +66,8 @@ void update_player(Player * player,Map* map){
 void draw_player(Player * player){
     al_draw_scaled_bitmap(
         player->image,
-        0, 0, 16, 16,
-        SCREEN_H/2, SCREEN_W/2, 32, 32,
+        0, 0, 48, 72,
+        SCREEN_H/2, SCREEN_W/2, 96, 104,
         0);
 }
 
@@ -96,7 +97,11 @@ bool wall_collision(Player* player,Map* map){
        || map->map[tl_y][tl_x]==WALL
        || map->map[tr_y][tr_x]==WALL
        || map->map[bl_y][bl_x]==WALL
-       || map->map[br_y][br_x]==WALL)return true;
+       || map->map[br_y][br_x]==WALL
+       || map->map[tl_y][tl_x]==WATER
+       || map->map[tr_y][tr_x]==WATER
+       || map->map[bl_y][bl_x]==WATER
+       || map->map[br_y][br_x]==WATER)return true;
 
     return false;
     

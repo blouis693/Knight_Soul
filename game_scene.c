@@ -7,20 +7,21 @@
 #include <time.h>
 Player player; // Player
 Map map; // Map
-SlimeEnemy enemy;
-int enemy_count = 0;
 extern int spawn_x;
 extern int spawn_y;
 
 extern int TILE_SIZE;
-
+Enemylist* head = NULL;
+Enemylist* tail = NULL;
+int enemy_count = 0;
 static void init(void){
     map = create_map("map0.txt", 0);
     
     
-    player = create_player("pacman.png",spawn_y,spawn_x);
+    player = create_player("pixilart-sprite-2.png",spawn_y,spawn_x);
     game_log("coord x:%d \n coords y:%d \n",spawn_x,spawn_y);
-    enemy = create_enemy("Slime.png",1,1);
+   
+
 }
 
 static void draw(void){
@@ -31,29 +32,48 @@ static void draw(void){
     
     // Draw
     draw_map(&map, Camera);
-    draw_enemy(&enemy,Camera);
     draw_player(&player);
-    
+    Enemylist* enemy = head;
+    while(enemy != NULL){
+        draw_enemy(enemy->enemy, Camera);
+        enemy = enemy->next;
+    }
 }
 
 static void update(void){
     Point dest = (Point){player.pos.x / TILE_SIZE,player.pos.y/TILE_SIZE};
-    enemy.coord = (Point){enemy.pos.x/TILE_SIZE,enemy.pos.y/TILE_SIZE};
     update_player(&player,&map);
-    update_enemy(&enemy, &map, enemy.coord,dest);
-//    if(enemy_count == 0){
-//        srand(time(0));
-//        int sx = Randoms(0, 19);
-//        int sy = Randoms(0,19);
-//        if(!enemy_group){
-//            enemy_group = insert_enemy(sx,sy);
-//            tail_group = enemy_group;
-//        }
-//        else{
-//            tail_group->next = insert_enemy(sx,sy);
-//            tail_group = tail_group->next;
-//        }
-//    }
+    if(enemy_count < 4){
+        
+        int sx;
+        int sy;
+
+        while(1){
+            sx = Randoms(0, 19);
+            sy = Randoms(0, 19);
+            if(map.map[sy][sx]==FLOOR)break;
+        }
+        SlimeEnemy* enemy = create_enemy("Slime.png",sy,sx);
+
+        if(head == NULL){
+            head = insert(enemy);
+            tail = head;
+        }
+        else{
+            tail->next = insert(enemy);
+            tail = tail->next;
+        }
+        enemy_count++;
+    }
+    Enemylist* enemy = head;
+    while(enemy != NULL){
+        enemy->enemy->coord = (Point){enemy->enemy->pos.x/TILE_SIZE,enemy->enemy->pos.y/TILE_SIZE};
+
+        update_enemy(enemy->enemy, &map, enemy->enemy->coord,dest);
+
+        enemy = enemy->next;
+    }
+
 }
 
 static void destroy(void){

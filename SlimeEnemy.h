@@ -19,6 +19,7 @@ typedef enum status_{
     Idle,
     Jump,
 } status;
+
 typedef struct SlimeEnemy_{
     Point coord; // coordinate of the player in index
     Point pos;
@@ -30,8 +31,13 @@ typedef struct SlimeEnemy_{
     int save_dist;
     int sprite_size;
 } SlimeEnemy;
-SlimeEnemy create_enemy(char * path,int row,int col);
+typedef struct Enemylist{
+    struct Enemylist* next;
+    SlimeEnemy* enemy;
+}Enemylist;
+SlimeEnemy* create_enemy(char * path,int row,int col);
 void update_enemy(SlimeEnemy * enemy,Map* map,Point src,Point dest);
+Enemylist* insert(SlimeEnemy* enemy);
 void draw_enemy(SlimeEnemy * enemy, Point cam);
 void delete_enemy(SlimeEnemy * enemy);
 int shortest_path(Point src,Point dest,Map* map);

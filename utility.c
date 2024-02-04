@@ -14,11 +14,12 @@ const int SCREEN_H = 800;
 const int RESERVE_SAMPLES = 4;
 const char* GAME_TITLE = "Brandon-RPG Adventure";
 const char* log_file = "log.txt";
-const int TILE_SIZE = 64;
+const int TILE_SIZE = 104;
 int spawn_x = 0;
 int spawn_y = 0;
-//Queue implementation
-
+int generateRandomNumber(int lowerBound, int upperBound) {
+    return (rand() % (upperBound - lowerBound + 1)) + lowerBound;
+}
 
 
 // Function to initialize the queue
